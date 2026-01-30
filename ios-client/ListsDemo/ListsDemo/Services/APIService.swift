@@ -8,7 +8,7 @@ import Foundation
 class APIService {
     static let shared = APIService()
 
-    let baseURL = "http://localhost:6969"
+    let baseURL = "https://feedback-test.ngrok.io"
 
     private init() {}
 
