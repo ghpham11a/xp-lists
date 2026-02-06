@@ -7,37 +7,11 @@ import SwiftUI
 
 struct PostCardView: View {
     let post: Post
+    var repository: PostRepository = DIContainer.shared.resolve(PostRepository.self)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            AsyncImage(url: APIService.shared.imageURL(for: post)) { phase in
-                switch phase {
-                case .empty:
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 200)
-                        .overlay {
-                            ProgressView()
-                        }
-                case .success(let image):
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: 200)
-                        .clipped()
-                case .failure:
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 200)
-                        .overlay {
-                            Image(systemName: "photo")
-                                .foregroundColor(.gray)
-                        }
-                @unknown default:
-                    EmptyView()
-                }
-            }
-            .cornerRadius(8)
+            CachedAsyncImage(url: repository.imageURL(for: post), height: 200, cornerRadius: 8)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(post.title)

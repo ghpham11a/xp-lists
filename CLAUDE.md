@@ -47,15 +47,14 @@ Update `APIService.swift` baseURL to use the ngrok URL for physical device testi
 All list pages use sessionStorage to preserve scroll position and page state when navigating to/from post details.
 
 ### iOS Client Structure
-- `Models/Post.swift` - Post and PostsResponse Codable models
-- `Services/APIService.swift` - Singleton API client, baseURL configured here
-- `Views/HomeView.swift` - Landing page with NavigationLinks
-- `Views/InfiniteScrollView.swift` - LazyVStack with onAppear trigger for loading
-- `Views/PaginationView.swift` - Page controls with smart ellipsis logic
-- `Views/PostDetailView.swift` - Single post display
-- `Views/PostCardView.swift` - Reusable card component with AsyncImage
+- `App/` - Entry point, root navigation, and Swinject `DIContainer` (all dependency registrations)
+- `Data/Models/` - Post and PostsResponse Codable models
+- `Data/Networking/` - `APIService` (singleton HTTP client, baseURL here) and `ImageCache` (memory + disk)
+- `Data/Repositories/` - `PostRepository` protocol + `APIPostRepository` implementation
+- `Features/` - One directory per screen, each with View + `@Observable` ViewModel (`*+ViewModel.swift`)
+- `Shared/Views/` - `PostCardView` (reusable card) and `CachedAsyncImage` (cached image loading)
 
-iOS uses UserDefaults for state persistence (equivalent to sessionStorage).
+Uses MVVM with Swinject DI, repository pattern, and UserDefaults for state persistence. See `ios-client/CLAUDE.md` for detailed patterns.
 
 ### Backend Structure
 - `server/app/main.py` - FastAPI app with CORS config, mounts `/static` for images
